@@ -8,15 +8,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Cliente {
 	private final static int MAX_BYTES = 1400;
 	private final static String COD_TEXTO = "UTF-8";
 	private final static Scanner SCANNER = new Scanner(System.in);
-    static HashMap<String, String> cuadricula = new HashMap<>();
     static ArrayList<String> barquitos = new ArrayList<>();
     static ArrayList<String> barquitos2 = new ArrayList<>();
 	
@@ -46,8 +43,8 @@ public class Cliente {
     	barquitos2.add("A1");
     	
     	if(Integer.parseInt(args[2]) == 1) {
-    		printCuadricula(barquitos);
-    	} else printCuadricula(barquitos2);
+    		Util.printCuadricula(barquitos);
+    	} else Util.printCuadricula(barquitos2);
     	
 		String nomHost = args[0];
 		int numPuerto = Integer.parseInt(args[1]);
@@ -101,35 +98,5 @@ public class Cliente {
 			System.out.println("Excepcion de E/S");
 			ex.printStackTrace();
 		}
-	}
-	
-	public static void printCuadricula(ArrayList<String> barquitas) {
-		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-		System.out.println("Tu cuadricula: ");
-		for(int i = 0; i < 10; i++) {
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			if(barquitas.contains(quad)) {
-    				cuadricula.put(abc[i]+(j+1), "\u25fc");
-    			} else cuadricula.put(abc[i]+(j+1), "\u25fb");
-    		}
-    	}
-    	
-    	for(int i = 0; i < 10; i++) {
-    		if(i == 0) {
-    			System.out.print("  ");
-    			for(int k = 0; k < 10; k++) {
-        	    	System.out.print(k+1 + "|");
-            	}
-    			System.out.println();
-    		}
-    		System.out.print(abc[i].toLowerCase() + " ");
-    		
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			System.out.print(cuadricula.get(quad) + " ");
-        	}
-    		System.out.println();
-    	}
 	}
 }

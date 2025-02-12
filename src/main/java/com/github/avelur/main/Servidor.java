@@ -47,27 +47,17 @@ class ServerRecibida implements Runnable{
 	
 	public void run() {
 		try {
-			System.out.println(1);
-				byte[] datosRecibidos = new byte[MAX_BYTES];
-				 
 			    InetAddress IPCliente = paqueteRecibido.getAddress();
-			    System.out.println(2);
-			    DatagramPacket packetEnviado = 
-			   		 new DatagramPacket(datosRecibidos, datosRecibidos.length,
-			   				 IPCliente, paqueteRecibido.getPort());
-			    //serverSocket.connect(IPCliente, paqueteRecibido.getPort());
-			    System.out.println(3);
-			    //serverSocket.send(packetEnviado);
 			    String lineaRecibida = new String(paqueteRecibido.getData(),
 			            0, paqueteRecibido.getLength(), COD_TEXTO);
-			    System.out.println(4);
+			    
 			    String[] cuadriculaString = new String(paqueteRecibido.getData(),
 			            0, paqueteRecibido.getLength(), COD_TEXTO).split(",");
 			    for(int i = 0; i < cuadriculaString.length; i++) {
 			    	barquitas.add(cuadriculaString[i]);
 			    }
-			    System.out.println(5);
-			    printCuadricula(barquitas, IPCliente);
+			    
+			    Util.printCuadricula(barquitas, IPCliente);
 			     
 			    int puertoCliente = paqueteRecibido.getPort();
 			    System.out.printf("Recibido datagrama de %s:%d (%s)\n",
@@ -79,43 +69,10 @@ class ServerRecibida implements Runnable{
 			    		b, b.length, IPCliente, puertoCliente);
 			    serverSocket.send(paqueteEnviado);
 			    barquitas.clear();
-			//while (true) {}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public static void printCuadricula(HashSet<String> barquitas, InetAddress IPCliente) {
-		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-		System.out.println("Cuadricula de: " + IPCliente.getHostAddress() + ":" + IPCliente.getAddress());
-		for(int i = 0; i < 10; i++) {
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			if(barquitas.contains(quad)) {
-    				cuadricula.put(abc[i]+(j+1), "\u25fc");
-    			} else cuadricula.put(abc[i]+(j+1), "\u25fb");
-    		}
-    	}
-    	
-    	for(int i = 0; i < 10; i++) {
-    		if(i == 0) {
-    			System.out.print("  ");
-    			for(int k = 0; k < 10; k++) {
-        	    	System.out.print(k+1 + "|");
-            	}
-    			System.out.println();
-    		}
-    		System.out.print(abc[i].toLowerCase() + " ");
-    		
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			System.out.print(cuadricula.get(quad) + " ");
-        	}
-    		System.out.println();
-    	}
-	}
-	
 }
 
 
@@ -124,8 +81,6 @@ class ServerRespuesta implements Runnable{
 	private DatagramSocket serverSocket;
 	private static int MAX_BYTES;
 	private static DatagramPacket paqueteRecibido;
-    static HashMap<String, String> cuadricula = new HashMap<String, String>();
-    static HashSet<String> barquitas = new HashSet<String>();
 	
 	public ServerRespuesta(DatagramSocket serverSocket, int MAX_BYTES, DatagramPacket paqueteRecibido) {
 		super();
@@ -136,73 +91,19 @@ class ServerRespuesta implements Runnable{
 	
 	public void run() {
 		try {
-			System.out.println(1);
 				byte[] datosRecibidos = new byte[MAX_BYTES];
 				 
 			    InetAddress IPCliente = paqueteRecibido.getAddress();
-			    System.out.println(2);
+			    
 			    DatagramPacket packetEnviado = 
 			   		 new DatagramPacket(datosRecibidos, datosRecibidos.length,
 			   				 IPCliente, paqueteRecibido.getPort());
-			    //serverSocket.connect(IPCliente, paqueteRecibido.getPort());
-			    System.out.println(3);
-			    //serverSocket.send(packetEnviado);
-			    String lineaRecibida = new String(paqueteRecibido.getData(),
-			            0, paqueteRecibido.getLength(), COD_TEXTO);
-			    System.out.println(4);
-			    String[] cuadriculaString = new String(paqueteRecibido.getData(),
-			            0, paqueteRecibido.getLength(), COD_TEXTO).split(",");
-			    for(int i = 0; i < cuadriculaString.length; i++) {
-			    	barquitas.add(cuadriculaString[i]);
-			    }
-			    System.out.println(5);
-			    printCuadricula(barquitas, IPCliente);
-			     
-			    int puertoCliente = paqueteRecibido.getPort();
-			    System.out.printf("Recibido datagrama de %s:%d (%s)\n",
-	                        IPCliente.getHostAddress(), puertoCliente, lineaRecibida);
-			     
-			    String respuesta = "#" + lineaRecibida + "#";
-			    byte[] b = respuesta.getBytes(COD_TEXTO);
-			    DatagramPacket paqueteEnviado = new DatagramPacket(
-			    		b, b.length, IPCliente, puertoCliente);
-			    serverSocket.send(paqueteEnviado);
-			    barquitas.clear();
-			//while (true) {}
+			    serverSocket.connect(IPCliente, paqueteRecibido.getPort());
+			    
+			    serverSocket.send(packetEnviado);
+			   
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public static void printCuadricula(HashSet<String> barquitas, InetAddress IPCliente) {
-		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-		System.out.println("Cuadricula de: " + IPCliente.getHostAddress() + ":" + IPCliente.getAddress());
-		for(int i = 0; i < 10; i++) {
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			if(barquitas.contains(quad)) {
-    				cuadricula.put(abc[i]+(j+1), "\u25fc");
-    			} else cuadricula.put(abc[i]+(j+1), "\u25fb");
-    		}
-    	}
-    	
-    	for(int i = 0; i < 10; i++) {
-    		if(i == 0) {
-    			System.out.print("  ");
-    			for(int k = 0; k < 10; k++) {
-        	    	System.out.print(k+1 + "|");
-            	}
-    			System.out.println();
-    		}
-    		System.out.print(abc[i].toLowerCase() + " ");
-    		
-    		for(int j = 0; j < 10; j++) {
-    			String quad = abc[i]+(j+1);
-    			System.out.print(cuadricula.get(quad) + " ");
-        	}
-    		System.out.println();
-    	}
-	}
-	
 }
