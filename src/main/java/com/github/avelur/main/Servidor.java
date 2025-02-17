@@ -43,6 +43,7 @@ class ServerRecibida implements Runnable{
     static HashSet<String> barquitosJugadorA = new HashSet<String>();
     static HashSet<String> barquitosJugadorB = new HashSet<String>();
     private static String[] JUGADORES = new String[2];
+    private static InetAddress[] IPS = new InetAddress[2];
 	
 	public ServerRecibida(DatagramSocket serverSocket, int MAX_BYTES, int numPuerto, DatagramPacket paqueteRecibido) {
 		super();
@@ -64,13 +65,11 @@ class ServerRecibida implements Runnable{
 		    if(JUGADORES[0] != null && JUGADORES[1] == null && matchNombre.find()) {
 		    	JUGADORES[1] = lineaRecibida;
 		    	System.out.println("El jugador " + JUGADORES[1] + " había prestado!");
+		    	IPS[0] = paqueteRecibido.getAddress();
 		    } else if(JUGADORES[0] == null && matchNombre.find()) {
 		    	JUGADORES[0] = lineaRecibida;
 		    	System.out.println("El jugador " + JUGADORES[0] + " había prestado!");
-		    } else {
-		    	String incorrectNombre = "Por favor, introducete el nombre correcto!";
-		    	respuestaThread = new Thread(new ServerRespuesta(serverSocket, incorrectNombre, numPuerto, IPCliente, "UTF-8"));
-		    	respuestaThread.start();
+		    	IPS[1] = paqueteRecibido.getAddress();
 		    }
 		    
 		    if(JUGADORES[0] != null && JUGADORES[1] != null) {			    
@@ -79,7 +78,7 @@ class ServerRecibida implements Runnable{
 			    for(int i = 0; i < cuadriculaString.length; i++) {
 			    	barquitosJugadorA.add(cuadriculaString[i]);
 			    }
-		    	Util.printCuadricula(barquitosJugadorA, IPCliente);
+		    	Util.printCuadricula(barquitosJugadorA, IPS[0]);
 		    }
 		     
 		    int puertoCliente = paqueteRecibido.getPort();

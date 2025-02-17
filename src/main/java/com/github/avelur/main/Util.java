@@ -54,7 +54,7 @@ public class Util {
     			if(barquitos.contains(quad)) {
     				cuadricula.put(abc[i]+(j+1), "\u25fc");
     			} else if (barquitos.contains(destroyed)) {
-    				cuadricula.put(abc[i]+(j+1), "X");
+    				cuadricula.put(abc[i]+(j+1), "x");
     			} else cuadricula.put(abc[i]+(j+1), "\u25fb");
     		}
     	}
@@ -76,6 +76,40 @@ public class Util {
     	}
 	}
 	
+	/*
+	public static void printBarco(Barco barquitos) {
+		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+		ArrayList<String> temporal = barquitos.getPosition();
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+    			String quad = abc[i]+(j+1);
+    			String destroyed = abc[i]+(j+1) + "X";
+    			if(temporal.contains(quad)) {
+    				cuadricula.put(abc[i]+(j+1), "\u25fc");
+    			} else if (temporal.contains(destroyed)) {
+    				cuadricula.put(abc[i]+(j+1), "x");
+    			} else cuadricula.put(abc[i]+(j+1), "\u25fb");
+    		}
+    	}
+    	for(int i = 0; i < 10; i++) {
+    		if(i == 0) {
+    			System.out.print("  ");
+    			for(int k = 0; k < 10; k++) {
+        	    	System.out.print(k+1 + "|");
+            	}
+    			System.out.println();
+    		}
+    		System.out.print(abc[i].toLowerCase() + " ");
+    		
+    		for(int j = 0; j < 10; j++) {
+    			String quad = abc[i]+(j+1);
+    			System.out.print(cuadricula.get(quad) + " ");
+        	}
+    		System.out.println();
+    	}
+	}
+	*/
+	
 	public static void disparar(ArrayList<String> barquitos, String fila) {
 		/*
 		Pattern pattern = Pattern.compile("\\w\\d");
@@ -88,12 +122,14 @@ public class Util {
     	} 
 	}
 	
-	public static void enviarCuadricula(DatagramSocket Socket, ArrayList<String> barquitos, int numPuerto, 
+	public static void enviarCuadricula(DatagramSocket Socket, Barco[] barquitos, int numPuerto, 
 			InetAddress Ip, String COD_TEXTO) throws IOException {
 		String cuadricula = "";
+		/*
 		for(String s: barquitos) {
 			cuadricula += s + ",";
 		}
+		*/
 		byte[] b = cuadricula.getBytes(COD_TEXTO);
 		DatagramPacket paqueteEnviado = new DatagramPacket(
 				b, b.length, Ip, numPuerto);
